@@ -19,16 +19,11 @@
 // dependencies/modules
 const inquirer = require("inquirer"); // asks questions
 const fs = require("fs"); // module for working with files
-const util = require("util"); // prints formatted strings
 
-// variables
-const writeFileAsync = util.promisify(fs.writeFile); 
-const generateReadMe = require('./utils/generateReadMe')
 
 // inquirer prompts/questions for user
 
-function promptuser(){
-    return inquirer.prompt([
+inquirer.prompt([
         {
 			type: 'input',
 			name: 'title',
@@ -51,7 +46,7 @@ function promptuser(){
         },
         {
 			type: 'input',
-			name: 'contributing',
+			name: 'contribution',
 			message: 'Project Contributors:'
         },
         {
@@ -107,10 +102,46 @@ function promptuser(){
 			type: 'input',
 			name: 'github',
 			message: 'Github Username:'
-		},
-	]);
+		}
+    ]
+).then (({
+    title,
+    description,
+    installation,
+    usage,
+    contribution,
+    tests,
+    license,
+    language,
+    email,
+    website,
+    github
+})=>{
+
+    const mdTemp = `# ${title}
+    * [Description]{#description}
+    * [Installation](#installation)
+    * [Usage]{#usage}
+    * [Contribution]{#contribution}
+    * [Tests]{#tests}
+    * [License]{#license}
+    * [Language]{#language}
+    # Installation
+    ${installation}
+    ## Usage
+    ${usage}
+    ## Contribution
+    ${contribution}
+    ### Instructions
+    ${instructions}
+    ## Language
+    ${language}
+    ## License
+    ${license}
+
+    # Contact
+    * GitHub :${git}
+
+
 }
-
-function makeFile ({ title, description, installation, })
-
-
+)
