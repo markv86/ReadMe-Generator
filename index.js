@@ -19,11 +19,14 @@
 // dependencies/modules
 const inquirer = require("inquirer"); // asks questions
 const fs = require("fs"); // module for working with files
-
+const util = require("util");
+const readMe = require("./file/generateReadMe");
+const writeFileAsync = util.promisify(fs.writeFile);
 
 // inquirer prompts/questions for user
 
-inquirer.prompt([
+function userPrompt() {
+	return inquirer.prompt([
         {
 			type: 'input',
 			name: 'title',
@@ -103,45 +106,19 @@ inquirer.prompt([
 			name: 'github',
 			message: 'Github Username:'
 		}
-    ]
-).then (({
-    title,
-    description,
-    installation,
-    usage,
-    contribution,
-    tests,
-    license,
-    language,
-    email,
-    website,
-    github
-})=>{
+	]);
+}	
 
-    const mdTemp = `# ${title}
-    * [Description]{#description}
-    * [Installation](#installation)
-    * [Usage]{#usage}
-    * [Contribution]{#contribution}
-    * [Tests]{#tests}
-    * [License]{#license}
-    * [Language]{#language}
-    # Installation
-    ${installation}
-    ## Usage
-    ${usage}
-    ## Contribution
-    ${contribution}
-    ### Instructions
-    ${instructions}
-    ## Language
-    ${language}
-    ## License
-    ${license}
-
-    # Contact
-    * GitHub :${git}
-
-
+async function init() {
+	try {
+		const reply = await userPrompt();
+		const generateContent = generateReadMe(reply);
+		await writeFileAsync ('./dist/README.md');
+	}
+	catch (err) {
+		console.log (err);
+		}
 }
-)
+
+init();
+
