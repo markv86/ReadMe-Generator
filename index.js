@@ -29,7 +29,7 @@ function userPrompt() {
 	return inquirer.prompt([
         {
 			type: 'input',
-			name: 'title',
+			name: 'projectTitle',
 			message: 'Project Title:',
 		},
 		{
@@ -49,7 +49,7 @@ function userPrompt() {
         },
         {
 			type: 'input',
-			name: 'contribution',
+			name: 'contributing',
 			message: 'Project Contributors:'
         },
         {
@@ -60,7 +60,6 @@ function userPrompt() {
         {
 			type: 'list',
 			name: 'license',
-			prefix: 'License',
 			message: 'License Type:',
 			choices: [
 				'None',
@@ -103,8 +102,13 @@ function userPrompt() {
 		},
 		{
 			type: 'input',
-			name: 'github',
+			name: 'githubName',
 			message: 'Github Username:'
+		},
+		{
+			type: 'input',
+			name: 'githubLink',
+			message: 'Github link:'
 		}
 	]);
 }	
@@ -112,8 +116,9 @@ function userPrompt() {
 async function init() {
 	try {
 		const reply = await userPrompt();
-		const generateContent = generateReadMe(reply);
-		await writeFileAsync ('./dist/README.md');
+		const generateContent = readMe(reply);
+		await writeFileAsync ('./README/README.md', generateContent);
+		console.log('✔️  Successfully wrote to README.md');
 	}
 	catch (err) {
 		console.log (err);
